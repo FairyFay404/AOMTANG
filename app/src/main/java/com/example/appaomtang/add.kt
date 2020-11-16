@@ -31,7 +31,7 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Use the [add.newInstance] factory method to
- * create an instance of this fragment.
+ * create an instance of this fragments.
  */
 
 

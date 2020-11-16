@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="เลือกกระเป๋าเงิน"
+        android:id="@+id/walletselect"/>
+    <item android:title="เลิอกช่วงเวลา"
+        android:id="@+id/timeselect"/>
+    <item android:title="ดูตามประเภท"
+        android:id="@+id/typeselect"/>
+</menu>

@@ -40,6 +40,24 @@ class add : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val c=Calendar.getInstance()
+        val year =c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day =c.get(Calendar.DAY_OF_MONTH)
+
+        var datebtn:Button=view.findViewById(R.id.date_button)
+        datebtn.setOnClickListener{
+            val dpd = DatePickerDialog(this,DatePickerDialog.OnDateSetListener{view,mYear,mMonth,mDay->
+                var datetv:TextView=view.findViewById(R.id.date_textview)
+                datetv.setText(""+mDay+"/"+mMonth+"/"+mYear)
+            },year,month,day)
+            dpd.show()
+        }
+
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

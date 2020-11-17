@@ -23,6 +23,16 @@ class normal : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val arrayAdapter = ArrayAdapter.createFromResource(view.context,R.array.activities,android.R.layout.simple_spinner_item)
+                .also {
+                    adapter ->
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    var spin:Spinner=view.findViewById(R.id.spinner)
+                    spin.adapter=adapter
+                }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

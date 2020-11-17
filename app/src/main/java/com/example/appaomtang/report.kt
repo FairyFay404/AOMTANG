@@ -28,7 +28,26 @@ class report : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    lateinit var payList:ArrayList<Entry>
+    lateinit var yearsList:ArrayList<String>
 
+
+    private fun getList(view: View): MutableList<PieEntry>? {
+        payList.add(Entry(40f,0))
+        payList.add(Entry(50f,1))
+        payList.add(Entry(60f,2))
+        payList.add(Entry(70f,3))
+        payList.add(Entry(80f,4))
+        return payList
+    }
+    private fun getYears(view: View):ArrayList<String>{
+        yearsList.add("2017")
+        yearsList.add("2018")
+        yearsList.add("2019")
+        yearsList.add("2020")
+        yearsList.add("2021")
+        return yearsList
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +55,13 @@ class report : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        payList=ArrayList()
+        yearsList=ArrayList()
+        val pieDataSet =PieDataSet(getList(view),"No. of students")
+        val pieData =PieData(getYears(view),pieDataSet)
+        pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS)
+        var pieChart:PieChart=view.findViewById(R.id.pieChart)
+        pieChart.data=pieData
 
 
     }

@@ -12,10 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Use the [add.newInstance] factory method to
- * create an instance of this fragments.
+ * create an instance of this fragment.
  */
 
 
@@ -40,25 +37,27 @@ class add : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var buttonDate =view.findViewById<Button>(R.id.date_button)
+        buttonDate.setOnClickListener{
+            dateClicked(view)
+        }
+    }
+    private fun dateClicked(view: View){
+        val textDate=view.findViewById<TextView>(R.id.date_textview)
         val c=Calendar.getInstance()
         val year =c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day =c.get(Calendar.DAY_OF_MONTH)
 
-        var datebtn:Button=view.findViewById(R.id.date_button)
-        datebtn.setOnClickListener{
-            val dpd = DatePickerDialog(this,DatePickerDialog.OnDateSetListener{view,mYear,mMonth,mDay->
-                var datetv:TextView=view.findViewById(R.id.date_textview)
-                datetv.setText(""+mDay+"/"+mMonth+"/"+mYear)
-            },year,month,day)
-            dpd.show()
-        }
-
+        val dpd=DatePickerDialog(view.context, DatePickerDialog.OnDateSetListener { view, years, monthOfYear, dayOfMonth ->
+            textDate.text = "" + dayOfMonth + "/" + monthOfYear + "/" + years
+            Toast.makeText(view.context,"เลือกสำเร็จ",Toast.LENGTH_SHORT).show()
+        }, year, month, day)
+        dpd.show()
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -26,8 +26,8 @@ class NoteRecycleAdapter(var noteList:ArrayList<Note_data>) :RecyclerView.Adapte
 
 
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var title = itemView.texttitle
-        var desription = itemView.textdesription
+        var title = itemView.findViewById<TextView>(R.id.texttitle)
+        var desription = itemView.findViewById<TextView>(R.id.textdesription)
 
     }
 

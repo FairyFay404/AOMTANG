@@ -6,12 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+var list = ArrayList<Note_data>()
 
 /**
  * A simple [Fragment] subclass.
@@ -26,9 +30,15 @@ class note : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val titleText=view.findViewById<EditText>(R.id.edit_1)
+        val DescText=view.findViewById<EditText>(R.id.edit_2)
         var buttoncreate=view.findViewById<Button>(R.id.buttonFragCreate)
         buttoncreate.setOnClickListener {
-            Toast.makeText(view.context,"บันทึกโน๊ตสำเร็จ", Toast.LENGTH_SHORT).show()
+            val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
+            list.add(Note_data(titleText.text.toString(), titleText.text.toString()))
+            recyclerView.adapter = NoteRecycleAdapter(list)
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            Toast.makeText(view.context,"บันทึกโน๊ตสำเร็จ"+titleText.text, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.appaomtang
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
@@ -8,19 +9,20 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.provider.Telephony
+import android.text.format.DateFormat.is24HourFormat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.text.DateFormat
 import java.util.*
 import java.util.zip.Inflater
+import javax.xml.datatype.DatatypeConstants.MONTHS
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,6 +64,35 @@ class add : Fragment() {
         // Inflate the layout for this fragment
 
         return inflater.inflate(R.layout.fragment_add, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val buttonDate = view.findViewById<Button>(R.id.date_button)
+
+
+        buttonDate.setOnClickListener{
+            dateClicked(view) //it = view (view ตัวมันเองอะ เก็ทมั้ย view ของ button) เราส่ง view ไปให้ฟังก์ชัน dateClicked
+        }
+
+    }
+
+
+    private fun dateClicked(view:View){
+        val textDate = view.findViewById<TextView>(R.id.date_textview)
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+
+        val dpd = DatePickerDialog(view.context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+
+            textDate.text = "วันที่ " + dayOfMonth + "/" + monthOfYear+ "/" + year
+            Toast.makeText(view.context,dayOfMonth.toString(),Toast.LENGTH_LONG).show()
+        }, year, month+1, day)
+
+        dpd.show()
     }
 
     companion object {

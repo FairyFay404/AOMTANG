@@ -7,10 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
 
 // TODO: Rename parameter arguments, choose names that match
@@ -32,12 +29,12 @@ class report : Fragment() {
     lateinit var yearsList:ArrayList<String>
 
 
-    private fun getList(view: View): MutableList<PieEntry>? {
-        payList.add(Entry(40f,0))
-        payList.add(Entry(50f,1))
-        payList.add(Entry(60f,2))
-        payList.add(Entry(70f,3))
-        payList.add(Entry(80f,4))
+    private fun getList(view: View): ArrayList<Entry> {
+        payList.add(Entry(0F,60.0F))
+        payList.add(Entry(1F,100.0F))
+        payList.add(Entry(2F,50.0F))
+        payList.add(Entry(3F,30.0F))
+        payList.add(Entry(4F,80.0F))
         return payList
     }
     private fun getYears(view: View):ArrayList<String>{
@@ -49,12 +46,8 @@ class report : Fragment() {
         return yearsList
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         payList=ArrayList()
         yearsList=ArrayList()
         val pieDataSet =PieDataSet(getList(view),"No. of students")
@@ -62,6 +55,17 @@ class report : Fragment() {
         pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS)
         var pieChart:PieChart=view.findViewById(R.id.pieChart)
         pieChart.data=pieData
+
+
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
 
 
     }

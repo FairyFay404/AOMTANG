@@ -25,10 +25,10 @@ class normal : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val arrayAdapter = ArrayAdapter.createFromResource(view.context,R.array.activities,android.R.layout.simple_spinner_item)
+        val arrayAdapter = ArrayAdapter.createFromResource(view.context,R.array.myWallet,android.R.layout.preference_category)
                 .also {
                     adapter ->
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice)
                     var spin:Spinner=view.findViewById(R.id.spinner)
                     spin.adapter=adapter
                 }

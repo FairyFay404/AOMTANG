@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.provider.Telephony
+import android.text.style.UnderlineSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -40,10 +41,21 @@ class add : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var buttonDate =view.findViewById<Button>(R.id.date_button)
+        var buttonok=view.findViewById<Button>(R.id.buttonok)
+        buttonok.setOnClickListener {
+            Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
+        }
+        var buttonDate =view.findViewById<TextView>(R.id.date_textview)
         buttonDate.setOnClickListener{
             dateClicked(view)
         }
+        val arrayAdapter = ArrayAdapter.createFromResource(view.context,R.array.myWallet,android.R.layout.preference_category)
+                .also {
+                    adapter ->
+                    adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice)
+                    var spin:Spinner=view.findViewById(R.id.spinner2)
+                    spin.adapter=adapter
+                }
     }
     private fun dateClicked(view: View){
         val textDate=view.findViewById<TextView>(R.id.date_textview)
@@ -67,6 +79,7 @@ class add : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(

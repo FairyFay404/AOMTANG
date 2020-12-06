@@ -1,3 +1,4 @@
+
 package com.example.appaomtang
 
 import android.graphics.Color
@@ -11,7 +12,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.formatter.PercentFormatter
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,8 +30,8 @@ class report : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    lateinit var payList:ArrayList<Entry>
-    lateinit var yearsList:ArrayList<String>
+//    lateinit var payList:ArrayList<Entry>
+    //   lateinit var yearsList:ArrayList<String>
 
 //    private fun getList(): ArrayList<Entry> {
 //        payList.add(Entry(0F,60.0F))
@@ -53,18 +54,59 @@ class report : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val NoOfEmp = ArrayList<PieEntry>()
         val pieChart = view.findViewById<PieChart>(R.id.pieChart)
-        NoOfEmp.add(PieEntry(10f,"2017"))
-        NoOfEmp.add(PieEntry(20f, "2018"))
-        NoOfEmp.add(PieEntry(30f, "2019"))
-        NoOfEmp.add(PieEntry(40f, "2020"))
-        NoOfEmp.add(PieEntry(50f, "2021"))
-        val dataSet = PieDataSet(NoOfEmp, "No. of students")
+        NoOfEmp.add(PieEntry(100f, "เงินเดือน"))
+        NoOfEmp.add(PieEntry(20f, "OT"))
+        NoOfEmp.add(PieEntry(30f, "โบนัส"))
+        NoOfEmp.add(PieEntry(40f, "Income"))
+        NoOfEmp.add(PieEntry(50f, "ดอกเบี้ย"))
+        val dataSet = PieDataSet(NoOfEmp, "ประเภทของรายรับ")
         val data =  PieData(dataSet)
         pieChart.setData(data)
-
-        val Pastel_Colors = listOf<Int>(Color.rgb(64, 89, 128), Color.rgb(149, 165, 124), Color.rgb(217, 184, 162) ,Color.rgb(191, 134, 134), Color.rgb(179, 48, 80) )
+        pieChart.setCenterText("รายรับ");
+        pieChart.setCenterTextSize(12F);
+        pieChart.setHoleRadius(40F);
+        pieChart.setTransparentCircleRadius(50F);
+        //dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setValueLinePart1Length(0.5f);
+        dataSet.setValueLinePart2Length(0.5f);
+        dataSet.setValueTextSize(14F);
+        dataSet.setSelectionShift(10F);
+        pieChart.setUsePercentValues(true);
+        dataSet.setValueFormatter(PercentFormatter())
+        val Pastel_Colors = listOf<Int>(Color.rgb(64, 89, 128), Color.rgb(149, 165, 124), Color.rgb(217, 184, 162), Color.rgb(191, 134, 134), Color.rgb(179, 48, 80))
         dataSet.setColors(Pastel_Colors); //เปลี่ยนสีจากข้างบนนะ
         pieChart.animateXY(500, 500); //ปรับความไวตรงนี้ได้นะ
+
+
+        val NoOfEmp2 = ArrayList<PieEntry>()
+        val pieChart2 = view.findViewById<PieChart>(R.id.pieChart2)
+        NoOfEmp2.add(PieEntry(100f, "ค่าอาหาร"))
+        NoOfEmp2.add(PieEntry(200f, "ค่าที่พัก"))
+        NoOfEmp2.add(PieEntry(80f, "ค่าเดินทาง"))
+        NoOfEmp2.add(PieEntry(140f, "ภาษี!!"))
+        NoOfEmp2.add(PieEntry(160f, "ค่าบำรุง"))
+        val dataSet2 = PieDataSet(NoOfEmp2, "ประเภทของรายจ่าย")
+        val data2 =  PieData(dataSet2)
+        pieChart2.setData(data2)
+        pieChart2.setCenterText("รายจ่าย");
+        pieChart2.setCenterTextSize(12F);
+        pieChart2.setHoleRadius(40F);
+        pieChart2.setTransparentCircleRadius(50F);
+        //dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet2.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet2.setValueLinePart1Length(0.5f);
+        dataSet2.setValueLinePart2Length(0.5f);
+        dataSet2.setValueTextSize(14F);
+        dataSet2.setSelectionShift(10F);
+        pieChart2.setUsePercentValues(true);
+        dataSet2.setValueFormatter(PercentFormatter())
+        val Pastel_Colors2 = listOf<Int>(Color.rgb(64, 89, 128), Color.rgb(149, 165, 124), Color.rgb(217, 184, 162), Color.rgb(191, 134, 134), Color.rgb(179, 48, 80))
+        dataSet2.setColors(Pastel_Colors2); //เปลี่ยนสีจากข้างบนนะ
+        pieChart2.animateXY(500, 500); //ปรับความไวตรงนี้ได้นะ
+
+
+
 //        payList=ArrayList()
 //        yearsList=ArrayList()
 //        val pieDataSet =PieDataSet(getList(view),"No. of students")

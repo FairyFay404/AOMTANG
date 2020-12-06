@@ -32,6 +32,11 @@ class normal : Fragment() {
                     var spin:Spinner=view.findViewById(R.id.spinner)
                     spin.adapter=adapter
                 }
+        /*
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_2)
+
+        recyclerView.adapter = NoteRecycleAdapter(value)
+        recyclerView.layoutManager = LinearLayoutManager(activity)*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

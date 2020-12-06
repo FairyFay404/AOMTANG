@@ -36,10 +36,10 @@ class note : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
         buttoncreate.setOnClickListener {
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
-            list.add(Note_data(titleText.text.toString(), titleText.text.toString()))
+            list.add(Note_data(titleText.text.toString(), DescText.text.toString()))
             recyclerView.adapter = NoteRecycleAdapter(list)
             recyclerView.layoutManager = LinearLayoutManager(activity)
-            Toast.makeText(view.context,"บันทึกโน๊ตสำเร็จ"+titleText.text, Toast.LENGTH_SHORT).show()
+            Toast.makeText(view.context,"บันทึกโน๊ตสำเร็จ"/*+titleText.text*/, Toast.LENGTH_SHORT).show()
         }
 
         recyclerView.adapter = NoteRecycleAdapter(list)

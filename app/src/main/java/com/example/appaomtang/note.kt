@@ -44,15 +44,15 @@ class note : Fragment() {
         var buttoncreate=view.findViewById<Button>(R.id.buttonFragCreate)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
 
-        val edit_1 = view.findViewById<EditText>(R.id.edit_1) as TextView
-        val edit_2 = view.findViewById<EditText>(R.id.edit_2) as TextView
+        val edit1 = view.findViewById<EditText>(R.id.edit_1) as TextView
+        val edit2 = view.findViewById<EditText>(R.id.edit_2) as TextView
         val docRef = db.collection("Note").document("note")
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null){
                     Log.d("exist","DocumentSnapshot data: ${document.data}")
-                    edit_1.text = document.getString("edit_1")
-                    edit_2.text = document.getString("edit_2")
+                    edit1.text = document.getString("edit_1")
+                    edit2.text = document.getString("edit_2")
                 }else{
                     Log.d("noexist","No such document")
                 }
@@ -63,20 +63,25 @@ class note : Fragment() {
 
         //
 
-
         buttoncreate.setOnClickListener {
+            val edit_1 =titleText.text.toString()
+            val edit_2 = DescText.text.toString()
+            saveFireStore(edit_1,edit_2)
+
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
-            docRef.update("edit_1",titleText.text.toString())
-            docRef.update("edit_2",DescText.text.toString())
+            //docRef.update("edit_1",titleText.text.toString())
+            //docRef.update("edit_2",DescText.text.toString())
 
             list.add(Note_data(titleText.text.toString(), DescText.text.toString()))
             recyclerView.adapter = NoteRecycleAdapter(list)
             recyclerView.layoutManager = LinearLayoutManager(activity)
             Toast.makeText(view.context,"บันทึกโน๊ตสำเร็จ"/*+titleText.text*/, Toast.LENGTH_SHORT).show()
         }
-
+       // readFireStoreData()
         recyclerView.adapter = NoteRecycleAdapter(list)
         recyclerView.layoutManager = LinearLayoutManager(activity)
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +90,41 @@ class note : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+    }
+     fun saveFireStore(edit_1:String,edit_2: String){
+
+         val db = FirebaseFirestore.getInstance()
+         //val titleText=view.findViewById<EditText>(R.id.edit_1)
+        // val DescText=view.findViewById<EditText>(R.id.edit_2)
+         val user :MutableMap<String,Any> = HashMap()
+             user["edit_1"] = edit_1
+             user["edit_2"] = edit_2
+             db.collection("Note")
+             .add(user)
+             .addOnSuccessListener {
+                    //Toast.makeText(this@note,"record added successfully",Toast.LENGTH_SHORT).show()
+              }
+            .addOnFailureListener{
+                   //Toast.makeText(this@note,"record Failed to add",Toast.LENGTH_SHORT).show()
+              }
+    //readFireStoreData()
+     }
+     fun readFireStoreData(){
+     val db = FirebaseFirestore.getInstance()
+         db.collection("Note")
+         .get()
+         .addOnCompleteListener{
+        val result:StringBuffer=StringBuffer()
+        if(it.isSuccessful){
+            for(document in it.result!!){
+                result.append(document.data.getValue("edit_1")).append(" ")
+                        .append(document.data.getValue("edit_2")).append("\n\n")
+            }
+            //val textViewResult=view.findViewById<EditText>(R.id.texttitle)
+            //textViewResult.setText(result)
+            //list.add(result,result)
+             }
+         }
     }
 
     override fun onCreateView(

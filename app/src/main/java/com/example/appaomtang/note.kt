@@ -1,15 +1,21 @@
 package com.example.appaomtang
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,13 +35,40 @@ class note : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val db = FirebaseFirestore.getInstance()
+
         super.onViewCreated(view, savedInstanceState)
         val titleText=view.findViewById<EditText>(R.id.edit_1)
         val DescText=view.findViewById<EditText>(R.id.edit_2)
         var buttoncreate=view.findViewById<Button>(R.id.buttonFragCreate)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
+
+        val edit_1 = view.findViewById<EditText>(R.id.edit_1) as TextView
+        val edit_2 = view.findViewById<EditText>(R.id.edit_2) as TextView
+        val docRef = db.collection("Note").document("note")
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null){
+                    Log.d("exist","DocumentSnapshot data: ${document.data}")
+                    edit_1.text = document.getString("edit_1")
+                    edit_2.text = document.getString("edit_2")
+                }else{
+                    Log.d("noexist","No such document")
+                }
+            }
+            .addOnFailureListener{exception->
+                Log.d("errordb","get failed with",exception)
+            }
+
+        //
+
+
         buttoncreate.setOnClickListener {
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
+            docRef.update("edit_1",titleText.text.toString())
+            docRef.update("edit_2",DescText.text.toString())
+
             list.add(Note_data(titleText.text.toString(), DescText.text.toString()))
             recyclerView.adapter = NoteRecycleAdapter(list)
             recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -45,7 +78,6 @@ class note : Fragment() {
         recyclerView.adapter = NoteRecycleAdapter(list)
         recyclerView.layoutManager = LinearLayoutManager(activity)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

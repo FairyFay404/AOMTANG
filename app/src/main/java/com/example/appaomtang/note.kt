@@ -66,10 +66,17 @@ class note : Fragment() {
         //
 
         buttoncreate.setOnClickListener {
+            val title =titleText.text.toString()
+            val content = DescText.text.toString()
+            val builder=NotificationModel(view.context,title, content).createNotification()
+            val notificationManagerCalling=NotificationManagerCalling(view.context,builder)
+            notificationManagerCalling.createChannel()
+            notificationManagerCalling.startNotification()
+
             val edit_1 =titleText.text.toString()
             val edit_2 = DescText.text.toString()
             saveFireStore(view,edit_1,edit_2)
-            //read()
+            read()
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
             //docRef.update("edit_1",titleText.text.toString())
             //docRef.update("edit_2",DescText.text.toString())
@@ -94,7 +101,7 @@ class note : Fragment() {
     }
     fun read(){
         val db = FirebaseFirestore.getInstance()
-        db.collection("Note")
+            db.collection("Note")
                 .get()
                 .addOnSuccessListener { result->
                     for(document in result){

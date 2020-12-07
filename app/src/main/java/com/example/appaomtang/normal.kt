@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +33,7 @@ class normal : Fragment() {
                     adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice)
                     var spin:Spinner=view.findViewById(R.id.spinner)
                     spin.adapter=adapter
+
                 }
         /*
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_2)

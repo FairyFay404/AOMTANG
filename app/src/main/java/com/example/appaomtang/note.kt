@@ -51,8 +51,10 @@ class note : Fragment() {
             .addOnSuccessListener { document ->
                 if (document != null){
                     Log.d("exist","DocumentSnapshot data: ${document.data}")
-                    edit1.text = document.getString("edit_1")
-                    edit2.text = document.getString("edit_2")
+                    //edit1.text = document.getString("edit_1")
+                    //edit2.text = document.getString("edit_2")
+                    //list.add(Note_data(document.getString("edit_1").toString(),document.getString("edit_2").toString()))
+                    //list.add(Note_data(edit1.text.toString(),edit2.text.toString()))
                 }else{
                     Log.d("noexist","No such document")
                 }
@@ -66,18 +68,17 @@ class note : Fragment() {
         buttoncreate.setOnClickListener {
             val edit_1 =titleText.text.toString()
             val edit_2 = DescText.text.toString()
-            saveFireStore(edit_1,edit_2)
-
+            saveFireStore(view,edit_1,edit_2)
+            //read()
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
             //docRef.update("edit_1",titleText.text.toString())
             //docRef.update("edit_2",DescText.text.toString())
-
             list.add(Note_data(titleText.text.toString(), DescText.text.toString()))
             recyclerView.adapter = NoteRecycleAdapter(list)
             recyclerView.layoutManager = LinearLayoutManager(activity)
-            Toast.makeText(view.context,"บันทึกโน๊ตสำเร็จ"/*+titleText.text*/, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(view.context,"บันทึกโน๊ตสำเร็จ"/*+titleText.text*/, Toast.LENGTH_SHORT).show()
         }
-       // readFireStoreData()
+       // readFireStoreData(view)
         recyclerView.adapter = NoteRecycleAdapter(list)
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
@@ -91,7 +92,21 @@ class note : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-     fun saveFireStore(edit_1:String,edit_2: String){
+    fun read(){
+        val db = FirebaseFirestore.getInstance()
+        db.collection("Note")
+                .get()
+                .addOnSuccessListener { result->
+                    for(document in result){
+                        Log.d(TAG,"${document.id}=>${document.data}")
+                    }
+                }
+                .addOnFailureListener{exception->
+                    Log.w(TAG,"Error getting documents.",exception)
+                }
+    }
+
+     fun saveFireStore(view: View,edit_1:String,edit_2: String){
 
          val db = FirebaseFirestore.getInstance()
          //val titleText=view.findViewById<EditText>(R.id.edit_1)
@@ -102,14 +117,14 @@ class note : Fragment() {
              db.collection("Note")
              .add(user)
              .addOnSuccessListener {
-                    //Toast.makeText(this@note,"record added successfully",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
               }
             .addOnFailureListener{
-                   //Toast.makeText(this@note,"record Failed to add",Toast.LENGTH_SHORT).show()
+                   Toast.makeText(view.context,"record Failed to add",Toast.LENGTH_SHORT).show()
               }
-    //readFireStoreData()
+    readFireStoreData(view)
      }
-     fun readFireStoreData(){
+     fun readFireStoreData(view: View){
      val db = FirebaseFirestore.getInstance()
          db.collection("Note")
          .get()

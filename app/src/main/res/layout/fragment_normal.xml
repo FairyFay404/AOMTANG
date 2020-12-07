@@ -43,14 +43,14 @@
         android:layout_width="353dp"
         android:layout_height="29dp"
         android:layout_marginTop="24dp"
-        android:text="dd/mm/yy"
+        android:text="ธุรกรรมของคุณ"
         android:background="#E2B85C"
         android:gravity="center"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/money"
+        app:layout_constraintTop_toBottomOf="@+id/sum"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -66,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/datetv"
+        app:layout_constraintTop_toBottomOf="@+id/money"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -114,7 +114,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/in"
-        app:layout_constraintTop_toBottomOf="@+id/datetv"
+        app:layout_constraintTop_toBottomOf="@+id/money"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -157,6 +157,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sum" />
+        app:layout_constraintTop_toBottomOf="@+id/datetv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -84,7 +84,7 @@ class report : Fragment() {
         NoOfEmp2.add(PieEntry(100f, "ค่าอาหาร"))
         NoOfEmp2.add(PieEntry(200f, "ค่าที่พัก"))
         NoOfEmp2.add(PieEntry(80f, "ค่าเดินทาง"))
-        NoOfEmp2.add(PieEntry(140f, "ภาษี!!"))
+        NoOfEmp2.add(PieEntry(140f, "ค่าช๊อปปิ้ง"))
         NoOfEmp2.add(PieEntry(160f, "ค่าบำรุง"))
         val dataSet2 = PieDataSet(NoOfEmp2, "ประเภทของรายจ่าย")
         val data2 =  PieData(dataSet2)

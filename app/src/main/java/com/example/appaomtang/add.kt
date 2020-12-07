@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import java.util.zip.Inflater
 
@@ -45,11 +46,37 @@ class add : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var buttonok=view.findViewById<Button>(R.id.buttonok)
-        buttonok.setOnClickListener {
-            Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
-        }
+        var moneyedit =view.findViewById<EditText>(R.id.number_money)
+        var noteedit=view.findViewById<EditText>(R.id.note_edit)
         var buttonDate =view.findViewById<Button>(R.id.date_textview)
+        var spin=view.findViewById<Spinner>(R.id.spinner2)
+        var textspin =view.findViewById<TextView>(R.id.textspin)
+        val activitiesList= arrayListOf<String>("My Wallet","ใช้จ่ายทั่วไป ","เพื่อการศึกษา","เงินออมฉุกเฉิน")
+        val arrayAdapter=ArrayAdapter(view.context,android.R.layout.preference_category,activitiesList)
+                .also {
+                    adapter ->
+                    adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice)
+                    var spin:Spinner=view.findViewById(R.id.spinner2)
+                    spin.adapter=adapter
+                }
+
+            spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val text = "${activitiesList[position]}"
+                    if (view != null) {
+                        Toast.makeText(view.context, "select ${activitiesList[position]}", Toast.LENGTH_SHORT).show()
+
+                        textspin.text="${activitiesList[position]}"
+                    }
+
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+            }
+
+
         buttonDate.setOnClickListener{
             dateClicked(view)
         }
@@ -57,13 +84,33 @@ class add : Fragment() {
         buttontype.setOnClickListener {
             typepick(view)
         }
-        val arrayAdapter = ArrayAdapter.createFromResource(view.context,R.array.myWallet,android.R.layout.preference_category)
-                .also {
-                    adapter ->
-                    adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice)
-                    var spin:Spinner=view.findViewById(R.id.spinner2)
-                    spin.adapter=adapter
-                }
+        var buttonok=view.findViewById<Button>(R.id.buttonok)
+        buttonok.setOnClickListener {
+            Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
+
+            val type =buttontype.text.toString()
+            val date = buttonDate.text.toString()
+            val money =moneyedit.text.toString()
+            val note =noteedit.text.toString()
+            val wallet=textspin.text.toString()
+            saveFireStore(view,money, note, type, date,wallet)
+        }
+        //val money =titleText.text.toString()
+        //val note = DescText.text.toString()
+
+        //val wallet =adapter.text.toString()
+
+
+            
+
+//        val arrayAdapter = ArrayAdapter.createFromResource(view.context,R.array.myWallet,android.R.layout.preference_category)
+//                .also {
+//                    adapter ->
+//                    adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice)
+//                    var spin:Spinner=view.findViewById(R.id.spinner2)
+//                    spin.adapter=adapter
+//                }
+
     }
     private fun dateClicked(view: View){
         val textDate=view.findViewById<Button>(R.id.date_textview)
@@ -123,6 +170,24 @@ class add : Fragment() {
 
     }
 
+    fun saveFireStore(view: View,money :String,note : String,type:String,date:String,wallet:String){
+
+        val db = FirebaseFirestore.getInstance()
+        val user :MutableMap<String,Any> = HashMap()
+        user["money"] = money
+        user["note"] = note
+        user["type"] = type
+        user["date"] = date
+        user["wallet"] = wallet
+        db.collection("add")
+                .add(user)
+                .addOnSuccessListener {
+                    Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener{
+                    Toast.makeText(view.context,"record Failed to add",Toast.LENGTH_SHORT).show()
+                }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

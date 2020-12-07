@@ -2,6 +2,7 @@ package com.example.appaomtang
 
 import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.lang.reflect.Member
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,33 +39,12 @@ class note : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val db = FirebaseFirestore.getInstance()
-
+       // setContenView(R.layout.fragment_note)
         super.onViewCreated(view, savedInstanceState)
         val titleText=view.findViewById<EditText>(R.id.edit_1)
         val DescText=view.findViewById<EditText>(R.id.edit_2)
         var buttoncreate=view.findViewById<Button>(R.id.buttonFragCreate)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
-
-        val edit1 = view.findViewById<EditText>(R.id.edit_1) as TextView
-        val edit2 = view.findViewById<EditText>(R.id.edit_2) as TextView
-        val docRef = db.collection("Note").document("note")
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null){
-                    Log.d("exist","DocumentSnapshot data: ${document.data}")
-                    //edit1.text = document.getString("edit_1")
-                    //edit2.text = document.getString("edit_2")
-                    //list.add(Note_data(document.getString("edit_1").toString(),document.getString("edit_2").toString()))
-                    //list.add(Note_data(edit1.text.toString(),edit2.text.toString()))
-                }else{
-                    Log.d("noexist","No such document")
-                }
-            }
-            .addOnFailureListener{exception->
-                Log.d("errordb","get failed with",exception)
-            }
-
-        //
 
         buttoncreate.setOnClickListener {
             val title =titleText.text.toString()
@@ -76,21 +57,35 @@ class note : Fragment() {
             val edit_1 =titleText.text.toString()
             val edit_2 = DescText.text.toString()
             saveFireStore(view,edit_1,edit_2)
-            read()
-            val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
-            //docRef.update("edit_1",titleText.text.toString())
-            //docRef.update("edit_2",DescText.text.toString())
+           // val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
+
             list.add(Note_data(titleText.text.toString(), DescText.text.toString()))
             recyclerView.adapter = NoteRecycleAdapter(list)
             recyclerView.layoutManager = LinearLayoutManager(activity)
             //Toast.makeText(view.context,"บันทึกโน๊ตสำเร็จ"/*+titleText.text*/, Toast.LENGTH_SHORT).show()
         }
-       // readFireStoreData(view)
+       // readFireStoreData()
+
         recyclerView.adapter = NoteRecycleAdapter(list)
         recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter!!.notifyDataSetChanged()
+       /* db.collection("Note")
+                .get()
+                .addOnCompleteListener{
+                    val result:StringBuffer=StringBuffer()
+                    if(it.isSuccessful){
+                        for(document in it.result!!){
+                            result.append(document.data.getValue("edit_1")).append(" ")
+                                    .append(document.data.getValue("edit_2")) .append("\n\n")
+                        }
+                        val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
+                        recyclerView.adapter = NoteRecycleAdapter(list)
+                        recyclerView.layoutManager = LinearLayoutManager(activity)
 
-
+                    }
+                }*/
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,25 +94,10 @@ class note : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-    fun read(){
-        val db = FirebaseFirestore.getInstance()
-            db.collection("Note")
-                .get()
-                .addOnSuccessListener { result->
-                    for(document in result){
-                        Log.d(TAG,"${document.id}=>${document.data}")
-                    }
-                }
-                .addOnFailureListener{exception->
-                    Log.w(TAG,"Error getting documents.",exception)
-                }
-    }
 
      fun saveFireStore(view: View,edit_1:String,edit_2: String){
 
          val db = FirebaseFirestore.getInstance()
-         //val titleText=view.findViewById<EditText>(R.id.edit_1)
-        // val DescText=view.findViewById<EditText>(R.id.edit_2)
          val user :MutableMap<String,Any> = HashMap()
              user["edit_1"] = edit_1
              user["edit_2"] = edit_2
@@ -129,25 +109,22 @@ class note : Fragment() {
             .addOnFailureListener{
                    Toast.makeText(view.context,"record Failed to add",Toast.LENGTH_SHORT).show()
               }
-    readFireStoreData(view)
+    //readFireStoreData()
      }
-     fun readFireStoreData(view: View){
+     /*fun readFireStoreData(){
      val db = FirebaseFirestore.getInstance()
          db.collection("Note")
          .get()
          .addOnCompleteListener{
-        val result:StringBuffer=StringBuffer()
-        if(it.isSuccessful){
-            for(document in it.result!!){
-                result.append(document.data.getValue("edit_1")).append(" ")
-                        .append(document.data.getValue("edit_2")).append("\n\n")
-            }
-            //val textViewResult=view.findViewById<EditText>(R.id.texttitle)
-            //textViewResult.setText(result)
-            //list.add(result,result)
+            val result:StringBuffer=StringBuffer()
+            if(it.isSuccessful){
+               for(document in it.result!!){
+                 result.append(document.data.getValue("edit_1")).append(" ")
+                         .append(document.data.getValue("edit_2")) .append("\n\n")
+                 }
              }
          }
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -176,4 +153,26 @@ class note : Fragment() {
                 }
             }
     }
+    inner class CustomAdapter: RecyclerView.Adapter<CustomHolder>() {
+        override fun onCreateViewHolder(parentView: ViewGroup, option: Int): CustomHolder {
+           val view = LayoutInflater.from(context).inflate(R.layout.fragment_note,parentView,false)
+            return CustomHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: CustomHolder, position: Int){
+
+        }
+        var recyclerView: RecyclerView? = null
+        override fun getItemCount(): Int {
+            return 20
+        }
+
+    }
+    val titleText= view?.findViewById<EditText>(R.id.edit_1)
+    val DescText= view?.findViewById<EditText>(R.id.edit_2)
+    inner class CustomHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
+        val title = titleText?.text.toString()
+        val content = DescText?.text.toString()
+    }
 }
+

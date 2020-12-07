@@ -27,14 +27,15 @@ class normal : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val arrayAdapter = ArrayAdapter.createFromResource(view.context,R.array.myWallet,android.R.layout.preference_category)
+        val activitiesList= arrayListOf<String>("My Wallet","ใช้จ่ายทั่วไป ","เพื่อการศึกษา","เงินออมฉุกเฉิน")
+        val arrayAdapter=ArrayAdapter(view.context,android.R.layout.preference_category,activitiesList)
                 .also {
                     adapter ->
                     adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice)
                     var spin:Spinner=view.findViewById(R.id.spinner)
                     spin.adapter=adapter
-
                 }
+
         /*
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_2)
 

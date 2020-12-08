@@ -18,11 +18,11 @@ class NormalRecycleAdapter(var normalList:ArrayList<normal_data>) : RecyclerView
     }
     override fun onBindViewHolder(holder: NormalViewHolder, position: Int) {
         val current:normal_data= normalList[position]
-        holder.money.text= current.money//.toString()
+        holder.money.text= current.money+" บาท"//.toString()
         holder.typepay.text=current.typepay
         holder.notewrite.text =current.notewrite
         holder.dateselect.text =current.dateselect
-
+        holder.textmoney.text=current.wallet
     }
 
 
@@ -31,7 +31,7 @@ class NormalRecycleAdapter(var normalList:ArrayList<normal_data>) : RecyclerView
         var typepay = itemView.findViewById<TextView>(R.id.textViewtype)
         var notewrite = itemView.findViewById<TextView>(R.id.textViewdesr)
         var dateselect = itemView.findViewById<TextView>(R.id.textViewdate)
-
+        var textmoney=itemView.findViewById<TextView>(R.id.textwallet)
 
     }
 

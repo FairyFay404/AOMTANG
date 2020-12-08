@@ -172,13 +172,21 @@ class add : Fragment() {
 
     fun saveFireStore(view: View,money :String,note : String,type:String,date:String,wallet:String){
 
-        val db = FirebaseFirestore.getInstance()
+        val t=Calendar.getInstance()
+        val year=t.get(Calendar.YEAR).toDouble()
+        val month=t.get(Calendar.MONTH).toDouble()
+        val day=t.get(Calendar.DAY_OF_MONTH).toDouble()
+        val hour=t.get(Calendar.HOUR_OF_DAY).toDouble()
+        val minute=t.get(Calendar.MINUTE).toDouble()
+        val sec=t.get(Calendar.SECOND).toDouble()
+        val tim =year*31536000+month*2592000+day*86400+hour*3600+minute*60+sec
         val user :MutableMap<String,Any> = HashMap()
         user["money"] = money
         user["note"] = note
         user["type"] = type
         user["date"] = date
         user["wallet"] = wallet
+        user["time"]=tim
         db.collection("add")
                 .add(user)
                 .addOnSuccessListener {

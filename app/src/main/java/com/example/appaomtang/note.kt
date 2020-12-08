@@ -31,7 +31,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 var list = ArrayList<Note_data>()
 val db = FirebaseFirestore.getInstance()
-var timeitem=Int
+val normalList=ArrayList<normal_data>()
 /**
  * A simple [Fragment] subclass.
  * Use the [note.newInstance] factory method to
@@ -44,8 +44,6 @@ class note : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-       // setContenView(R.layout.fragment_note)
         super.onViewCreated(view, savedInstanceState)
         val titleText=view.findViewById<EditText>(R.id.edit_1)
         val DescText=view.findViewById<EditText>(R.id.edit_2)
@@ -65,13 +63,7 @@ class note : Fragment() {
             readFireStore(view)
         }
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+
     fun readFireStore(view: View){
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
         list.clear()
@@ -112,6 +104,13 @@ class note : Fragment() {
                    Toast.makeText(view.context,"record Failed to add",Toast.LENGTH_SHORT).show()
               }
      }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -46,6 +46,7 @@ class add : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var tcn=view.findViewById<TextView>(R.id.textcheatnum)
         var moneyedit =view.findViewById<EditText>(R.id.number_money)
         var noteedit=view.findViewById<EditText>(R.id.note_edit)
         var buttonDate =view.findViewById<Button>(R.id.date_textview)
@@ -76,7 +77,7 @@ class add : Fragment() {
                 }
             }
 
-
+        readnumcal(view)
         buttonDate.setOnClickListener{
             dateClicked(view)
         }
@@ -90,10 +91,15 @@ class add : Fragment() {
 
             val type =buttontype.text.toString()
             val date = buttonDate.text.toString()
-            val money =moneyedit.text.toString()
+            val money1 =moneyedit.text.toString()
+            val money11=money1.toDouble()
+            val num2=tcn.text.toString()
+            val num22=num2.toDouble()
+            val money1111=num22+money11
             val note =noteedit.text.toString()
             val wallet=textspin.text.toString()
-            saveFireStore(view,money, note, type, date,wallet)
+            updatedata(view,money1111)
+            saveFireStore(view,money1, note, type, date,wallet)
         }
         //val money =titleText.text.toString()
         //val note = DescText.text.toString()
@@ -112,6 +118,51 @@ class add : Fragment() {
 //                }
 
     }
+
+    fun updatedata(view: View,num11: Double){
+        val dbnum=db.collection("normal").document("normal")
+        dbnum.update("moneyin",num11.toString())
+    }
+        fun readnumcal(view: View){
+            var tcn=view.findViewById<TextView>(R.id.textcheatnum)
+            val dbnum = db.collection("normal").document("normal")
+            dbnum.get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            val num111 = document["moneyin"].toString()
+                            val num101 = num111.toDouble()
+                            tcn.text=num101.toString()
+                        }
+                    }
+        }
+
+    fun saveFireStore(view: View,money :String,note : String,type:String,date:String,wallet:String){
+
+        val t=Calendar.getInstance()
+        val year=t.get(Calendar.YEAR).toDouble()
+        val month=t.get(Calendar.MONTH).toDouble()
+        val day=t.get(Calendar.DAY_OF_MONTH).toDouble()
+        val hour=t.get(Calendar.HOUR_OF_DAY).toDouble()
+        val minute=t.get(Calendar.MINUTE).toDouble()
+        val sec=t.get(Calendar.SECOND).toDouble()
+        val tim =year*31536000+month*2592000+day*86400+hour*3600+minute*60+sec
+        val user :MutableMap<String,Any> = HashMap()
+        user["money"] = money
+        user["note"] = note
+        user["type"] = type
+        user["date"] = date
+        user["wallet"] = wallet
+        user["time"] = tim
+        db.collection("add")
+                .add(user)
+                .addOnSuccessListener {
+                    Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener{
+                    Toast.makeText(view.context,"record Failed to add",Toast.LENGTH_SHORT).show()
+                }
+    }
+
     private fun dateClicked(view: View){
         val textDate=view.findViewById<Button>(R.id.date_textview)
         val c=Calendar.getInstance()
@@ -170,32 +221,7 @@ class add : Fragment() {
 
     }
 
-    fun saveFireStore(view: View,money :String,note : String,type:String,date:String,wallet:String){
 
-        val t=Calendar.getInstance()
-        val year=t.get(Calendar.YEAR).toDouble()
-        val month=t.get(Calendar.MONTH).toDouble()
-        val day=t.get(Calendar.DAY_OF_MONTH).toDouble()
-        val hour=t.get(Calendar.HOUR_OF_DAY).toDouble()
-        val minute=t.get(Calendar.MINUTE).toDouble()
-        val sec=t.get(Calendar.SECOND).toDouble()
-        val tim =year*31536000+month*2592000+day*86400+hour*3600+minute*60+sec
-        val user :MutableMap<String,Any> = HashMap()
-        user["money"] = money
-        user["note"] = note
-        user["type"] = type
-        user["date"] = date
-        user["wallet"] = wallet
-        user["time"]=tim
-        db.collection("add")
-                .add(user)
-                .addOnSuccessListener {
-                    Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener{
-                    Toast.makeText(view.context,"record Failed to add",Toast.LENGTH_SHORT).show()
-                }
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

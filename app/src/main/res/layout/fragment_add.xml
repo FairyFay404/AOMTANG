@@ -37,6 +37,14 @@
             android:textSize="25dp"
             android:inputType="numberDecimal"
             android:hint="เพิ่มเงิน" />
+
+        <TextView
+            android:id="@+id/textcheatnum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="0dp"
+            android:text="" />
     </LinearLayout>
 
 

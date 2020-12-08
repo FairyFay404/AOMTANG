@@ -32,6 +32,7 @@ private const val ARG_PARAM2 = "param2"
 var list = ArrayList<Note_data>()
 val db = FirebaseFirestore.getInstance()
 val normalList=ArrayList<normal_data>()
+val nuumcal=ArrayList<numcal>()
 /**
  * A simple [Fragment] subclass.
  * Use the [note.newInstance] factory method to

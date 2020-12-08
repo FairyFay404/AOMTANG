@@ -1,5 +1,6 @@
 package com.example.appaomtang
 
+import android.graphics.Insets.add
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -20,7 +21,7 @@ import kotlin.collections.ArrayList
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
+val num11=Double
 
 /**
  * A simple [Fragment] subclass.
@@ -34,6 +35,8 @@ class normal : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val b_out=view.findViewById<TextView>(R.id.b_out)
+        val b_in=view.findViewById<TextView>(R.id.b_in)
         val activitiesList= arrayListOf<String>("My Wallet","ใช้จ่ายทั่วไป ","เพื่อการศึกษา","เงินออมฉุกเฉิน")
         val arrayAdapter=ArrayAdapter(view.context,android.R.layout.preference_category,activitiesList)
                 .also {
@@ -42,18 +45,35 @@ class normal : Fragment() {
                     var spin:Spinner=view.findViewById(R.id.spinner)
                     spin.adapter=adapter
                 }
+
+        readnumcal(view)
         readFireStore(view)
+//        updatedata(view)
+
+    }
+//    fun updatedata(view: View,num11: Double){
+//        val dbnum=db.collection("normal").document("normal")
+//        val upd=10
+//        dbnum.update("income",upd.toString())
+//    }
+    fun readnumcal(view: View){
         val b_in=view.findViewById<TextView>(R.id.b_in)
-        val numeiei=10000
-        //val numeiei=db.collection("normal").get()
-        b_in.text=numeiei.toString()+" บาท"
+        val dbnum=db.collection("normal").document("normal")
+        dbnum.get()
+                .addOnSuccessListener { document->
+                        if (document != null) {
+                            val num111=document["moneyin"].toString()
+                            val num11=num111.toDouble()
+                            b_in.text=num11.toString()
+                        }
+                }
     }
     fun readFireStore(view: View){
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_2)
         normalList.clear()
         db.collection("add")
                 .whereEqualTo("wallet", "My Wallet")
-                //.orderBy("date", Query.Direction.DESCENDING)
+                .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {

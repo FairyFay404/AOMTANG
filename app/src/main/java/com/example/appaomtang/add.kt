@@ -64,7 +64,7 @@ class add : Fragment() {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     val text = "${activitiesList[position]}"
                     if (view != null) {
-                        Toast.makeText(view.context, "select ${activitiesList[position]}", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(view.context, "select ${activitiesList[position]}", Toast.LENGTH_SHORT).show()
 
                         textspin.text="${activitiesList[position]}"
                     }

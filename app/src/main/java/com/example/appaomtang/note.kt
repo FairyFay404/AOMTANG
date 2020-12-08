@@ -1,6 +1,7 @@
 package com.example.appaomtang
 
 import android.content.ContentValues.TAG
+import android.graphics.Path
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -15,9 +16,14 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.lang.reflect.Member
+import java.sql.Timestamp
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,7 +31,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 var list = ArrayList<Note_data>()
 val db = FirebaseFirestore.getInstance()
-
+var timeitem=Int
 /**
  * A simple [Fragment] subclass.
  * Use the [note.newInstance] factory method to
@@ -70,6 +76,7 @@ class note : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_1)
         list.clear()
         db.collection("note123")
+                .orderBy("time",Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
@@ -85,8 +92,17 @@ class note : Fragment() {
      fun saveFireStore(view: View,edit_1:String,edit_2: String){
 
          val user :MutableMap<String,Any> = HashMap()
+         val t=Calendar.getInstance()
+         val year=t.get(Calendar.YEAR).toDouble()
+         val month=t.get(Calendar.MONTH).toDouble()
+         val day=t.get(Calendar.DAY_OF_MONTH).toDouble()
+         val hour=t.get(Calendar.HOUR_OF_DAY).toDouble()
+         val minute=t.get(Calendar.MINUTE).toDouble()
+         val sec=t.get(Calendar.SECOND).toDouble()
+         val tim =year*31536000+month*2592000+day*86400+hour*3600+minute*60+sec
              user["edit_1"] = edit_1
              user["edit_2"] = edit_2
+             user["time"]= tim
              db.collection("note123")
              .add(user)
              .addOnSuccessListener {
@@ -95,7 +111,6 @@ class note : Fragment() {
             .addOnFailureListener{
                    Toast.makeText(view.context,"record Failed to add",Toast.LENGTH_SHORT).show()
               }
-         //readFireStore(view)
      }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,4 +140,5 @@ class note : Fragment() {
             }
     }
 }
+
 

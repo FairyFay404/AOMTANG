@@ -64,7 +64,7 @@ class normal : Fragment() {
                         if (document != null) {
                             val num111=document["moneyin"].toString()
                             val num11=num111.toDouble()
-                            b_in.text=num11.toString()
+                            b_in.text=num11.toString()+" บาท"
                         }
                 }
     }
@@ -73,11 +73,12 @@ class normal : Fragment() {
         normalList.clear()
         db.collection("add")
                 .whereEqualTo("wallet", "My Wallet")
-                .orderBy("date", Query.Direction.DESCENDING)
+                .orderBy("datesort", Query.Direction.DESCENDING)
+                .orderBy("time",Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
-                        normalList.add(normal_data(document.data["money"].toString(),document.data["type"].toString(),document.data["note"].toString(),document.data["date"].toString(),document.data["wallet"].toString()))
+                        normalList.add(normal_data(document.data["money"].toString(),document.data["type"].toString(),document.data["note"].toString(),document.data["date"].toString(),document.data["wallet"].toString(),document.data["time"].toString()))
                         recyclerView.adapter = NormalRecycleAdapter(normalList)
                         recyclerView.layoutManager = LinearLayoutManager(activity)
                     }

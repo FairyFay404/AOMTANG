@@ -24,6 +24,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import java.util.zip.Inflater
+import kotlin.time.measureTimedValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,6 +47,7 @@ class add : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var textdatesort=view.findViewById<TextView>(R.id.textdatesort)
         var tcn=view.findViewById<TextView>(R.id.textcheatnum)
         var moneyedit =view.findViewById<EditText>(R.id.number_money)
         var noteedit=view.findViewById<EditText>(R.id.note_edit)
@@ -85,21 +87,25 @@ class add : Fragment() {
         buttontype.setOnClickListener {
             typepick(view)
         }
+
         var buttonok=view.findViewById<Button>(R.id.buttonok)
         buttonok.setOnClickListener {
             Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
-
+            val wallet=textspin.text.toString()
             val type =buttontype.text.toString()
             val date = buttonDate.text.toString()
+            val date2=textdatesort.text.toString()
             val money1 =moneyedit.text.toString()
-            val money11=money1.toDouble()
+            val note =noteedit.text.toString()
             val num2=tcn.text.toString()
+
+            val money11=money1.toDouble()
             val num22=num2.toDouble()
             val money1111=num22+money11
-            val note =noteedit.text.toString()
-            val wallet=textspin.text.toString()
+
             updatedata(view,money1111)
-            saveFireStore(view,money1, note, type, date,wallet)
+            saveFireStore(view,money1, note, type, date,wallet,date2)
+            readnumcal(view)
         }
         //val money =titleText.text.toString()
         //val note = DescText.text.toString()
@@ -136,7 +142,7 @@ class add : Fragment() {
                     }
         }
 
-    fun saveFireStore(view: View,money :String,note : String,type:String,date:String,wallet:String){
+    fun saveFireStore(view: View,money :String,note : String,type:String,date:String,wallet:String,date2:String){
 
         val t=Calendar.getInstance()
         val year=t.get(Calendar.YEAR).toDouble()
@@ -147,12 +153,13 @@ class add : Fragment() {
         val sec=t.get(Calendar.SECOND).toDouble()
         val tim =year*31536000+month*2592000+day*86400+hour*3600+minute*60+sec
         val user :MutableMap<String,Any> = HashMap()
+        user["time"] = tim.toString()
         user["money"] = money
         user["note"] = note
         user["type"] = type
         user["date"] = date
         user["wallet"] = wallet
-        user["time"] = tim
+        user["datesort"] =date2
         db.collection("add")
                 .add(user)
                 .addOnSuccessListener {
@@ -165,6 +172,7 @@ class add : Fragment() {
 
     private fun dateClicked(view: View){
         val textDate=view.findViewById<Button>(R.id.date_textview)
+        val textdatesort=view.findViewById<TextView>(R.id.textdatesort)
         val c=Calendar.getInstance()
         val year =c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
@@ -172,7 +180,12 @@ class add : Fragment() {
 
         val dpd=DatePickerDialog(view.context, DatePickerDialog.OnDateSetListener { view, years, monthOfYear, dayOfMonth ->
             val mo=monthOfYear+1
+            val mcal=mo.toDouble()
+            val ycal=years.toDouble()
+            val dcal=dayOfMonth.toDouble()
+            val cal=ycal*365+mcal*31+dcal
             textDate.text = "" + dayOfMonth + "/" + mo + "/" + years
+            textdatesort.text=cal.toString()
             Toast.makeText(view.context,"เลือกสำเร็จ",Toast.LENGTH_SHORT).show()
         }, year, month, day)
         dpd.show()

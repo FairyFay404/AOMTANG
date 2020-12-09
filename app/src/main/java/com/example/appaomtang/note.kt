@@ -24,6 +24,7 @@ import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.nextTowards
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,7 +74,7 @@ class note : Fragment() {
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
-                        list.add(Note_data(document.data["edit_1"].toString(),document.data["edit_2"].toString()))
+                        list.add(Note_data(document.data["edit_1"].toString(),document.data["edit_2"].toString(),document.data["time"].toString()))
                         recyclerView.adapter = NoteRecycleAdapter(list)
                         recyclerView.layoutManager = LinearLayoutManager(activity)
                     }
@@ -95,7 +96,7 @@ class note : Fragment() {
          val tim =year*31536000+month*2592000+day*86400+hour*3600+minute*60+sec
              user["edit_1"] = edit_1
              user["edit_2"] = edit_2
-             user["time"]= tim
+             user["time"]= tim.toString()
              db.collection("note123")
              .add(user)
              .addOnSuccessListener {

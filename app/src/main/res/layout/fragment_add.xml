@@ -18,7 +18,13 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="100">
-
+        <TextView
+            android:id="@+id/textcheatnum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="0dp"
+            android:text="" />
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
@@ -38,13 +44,7 @@
             android:inputType="numberDecimal"
             android:hint="เพิ่มเงิน" />
 
-        <TextView
-            android:id="@+id/textcheatnum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="10dp"
-            android:text="" />
+
     </LinearLayout>
 
 
@@ -161,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="0dp"
+                    android:textSize="10dp"
                     android:text="" />
 
                 <Button

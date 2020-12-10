@@ -36,7 +36,8 @@ class NoteRecycleAdapter(var noteList:ArrayList<Note_data>) :RecyclerView.Adapte
                     .addOnSuccessListener { documents ->
                         for (document in documents) {
                             holder.title.text=document.id
-                            val datatodel =holder.title.text.toString()
+                            //val datatodel =holder.title.text.toString()
+                            val datatodel=document.id
                             deletedata(datatodel)
                         }
                     }

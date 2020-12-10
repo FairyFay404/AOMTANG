@@ -7,9 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -37,17 +35,45 @@ class normal : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val b_out=view.findViewById<TextView>(R.id.b_out)
         val b_in=view.findViewById<TextView>(R.id.b_in)
+        var button=view.findViewById<Button>(R.id.button)
+        var spin:Spinner=view.findViewById(R.id.spinner)
+        val textspin=view.findViewById<TextView>(R.id.money)
         val activitiesList= arrayListOf<String>("My Wallet","ใช้จ่ายทั่วไป ","เพื่อการศึกษา","เงินออมฉุกเฉิน")
         val arrayAdapter=ArrayAdapter(view.context,android.R.layout.preference_category,activitiesList)
                 .also {
                     adapter ->
                     adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice)
-                    var spin:Spinner=view.findViewById(R.id.spinner)
                     spin.adapter=adapter
                 }
 
-        readnumcal(view)
-        readFireStore(view)
+        spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val text = "${activitiesList[position]}"
+                if (view != null) {
+                    //Toast.makeText(view.context, "select ${activitiesList[position]}", Toast.LENGTH_SHORT).show()
+                    textspin.text="${activitiesList[position]}"
+                    db.collection("sort").document("normal")
+                        .update("walletsort","${activitiesList[position]}")
+
+                }
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+        var wallet=textspin.text.toString()
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_2)
+        button.setOnClickListener {
+            normalList.clear()
+            recyclerView.adapter = NormalRecycleAdapter(normalList)
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            readnumcal(view)
+            getsort(view)
+        }
+
+//        readFireStore(view,wallet)
 //        updatedata(view)
 
     }
@@ -68,11 +94,12 @@ class normal : Fragment() {
                         }
                 }
     }
-    fun readFireStore(view: View){
+
+    fun readFireStore(view: View,wallet:String){
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycle_2)
         normalList.clear()
         db.collection("add")
-                .whereEqualTo("wallet", "My Wallet")
+                .whereEqualTo("wallet", wallet)
                 .orderBy("datesort", Query.Direction.DESCENDING)
                 .orderBy("time",Query.Direction.DESCENDING)
                 .get()
@@ -86,6 +113,17 @@ class normal : Fragment() {
                 .addOnFailureListener { exception ->
                     Log.w("MOO", "Error getting documents: ", exception)
                 }
+    }
+    fun getsort(view: View){
+        val b_in=view.findViewById<TextView>(R.id.b_in)
+        val dbnum=db.collection("sort").document("normal")
+        dbnum.get()
+            .addOnSuccessListener { document->
+                if (document != null) {
+                    val num111=document["walletsort"].toString()
+                    readFireStore(view,num111)
+                }
+            }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

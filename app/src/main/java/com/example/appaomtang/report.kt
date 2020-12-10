@@ -25,7 +25,7 @@ val sumot=ArrayList<numcal>()
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
+var listreport=ArrayList<report1>()
 /**
  * A simple [Fragment] subclass.
  * Use the [report.newInstance] factory method to
@@ -41,14 +41,25 @@ class report : Fragment() {
 
         var tex=view.findViewById<TextView>(R.id.texttser)
         var tex2=view.findViewById<TextView>(R.id.texttsercheat)
-        readFireStore(view)
-        var sum=tex2.text.toString()
-        var sum2=sum.toFloat()
-
+        var reprotlist= listOf<Float>()
+        var wallet="My Wallet"
+        var typewallet="เงินเดือน"
+        readFireStore(view,typewallet)
+        var x:Float=0f
+//        for(item in listreport){
+//            x+= listreport[0]
+//        }
+//        var datalist= listreport
+//        datalist.forEach {
+//            x += it
+//        }
+//        var sum=tex.text.toString()
+//        var sum2=sum.toDouble()
+//        tex2.text=sum2.toString()
         val NoOfEmp = ArrayList<PieEntry>()
         val pieChart = view.findViewById<PieChart>(R.id.pieChart)
         NoOfEmp.add(PieEntry(100f, "เงินเดือน"))
-        NoOfEmp.add(PieEntry(sum2, "OT"))
+        NoOfEmp.add(PieEntry(200f, "OT"))
         NoOfEmp.add(PieEntry(30f, "โบนัส"))
         NoOfEmp.add(PieEntry(40f, "Income"))
         NoOfEmp.add(PieEntry(50f, "ดอกเบี้ย"))
@@ -110,29 +121,47 @@ class report : Fragment() {
         dbnum.update("OT",num11.toString())
     }
 
-    fun readFireStore(view: View){
-        var sum2:Float
+    fun readFireStore(view: View,typewallet:String){
+        var sum2:Double
+        var tex=view.findViewById<TextView>(R.id.texttser)
+        var tex2=view.findViewById<TextView>(R.id.texttsercheat)
         db.collection("add")
-                .whereEqualTo("wallet", "My Wallet")
-                .whereEqualTo("type","OT")
-                .orderBy("datesort", Query.Direction.DESCENDING)
-                .orderBy("time", Query.Direction.DESCENDING)
+                .whereEqualTo("type",typewallet)
+                .orderBy("time",Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
-                        var tex=view.findViewById<TextView>(R.id.texttser)
                         var sum=document.data["money"].toString()
-                        var sum1=sum.toFloat()
-                        var summ=tex.text.toString()
-                        var summ1=summ.toFloat()
-                        sum2=sum1+summ1
-                        tex.text=sum2.toString()
-
+                        var sum2=sum.toFloat()
+                        var sum3:Float
+//                        var sum1=sum.toFloat()
+//                        db.collection("report").document("report")
+//                            .get()
+//                            .addOnSuccessListener {
+//                                tex.text = document.data["income"].toString()
+//                            }
+//                        var sum2=tex.text.toString()
+//                        var sum22=sum2.toFloat()
+//                        var sumfinal=sum22+sum1
+//                        db.collection("report").document("report")
+//                            .update("income",sumfinal)
+//                          listreport.add(report1(sum1))
+//                        var sum=document.data["money"].toString()
+//                        tex.text=document.data["money"].toString()
+//                        var sum1=sum.toDouble()
+//
+//                        var summ=tex2.text.toString()
+//                        var summ1=summ.toDouble()
+//                        sum2=sum1+summ1
+//                        tex2.text=sum2.toString()
+//                        var sumfinal=tex2.text.toString()
+//                        db.collection("report").document("report")
+//                            .update("income",sumfinal)
+                        //tex.text=sum2.toString()
                     }
+
                 }
-                .addOnFailureListener { exception ->
-                    Log.w("MOO", "Error getting documents: ", exception)
-                }
+
     }
 
 

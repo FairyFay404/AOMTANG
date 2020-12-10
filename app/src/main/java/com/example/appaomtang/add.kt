@@ -58,7 +58,7 @@ class add : Fragment() {
         var buttonDate =view.findViewById<Button>(R.id.date_textview)
         var spin=view.findViewById<Spinner>(R.id.spinner2)
         var textspin =view.findViewById<TextView>(R.id.textspin)
-        val activitiesList= arrayListOf<String>("My Wallet","ใช้จ่ายทั่วไป ","เพื่อการศึกษา","เงินออมฉุกเฉิน")
+        val activitiesList= arrayListOf<String>("My Wallet","ใช้จ่ายทั่วไป","เพื่อการศึกษา","เงินออมฉุกเฉิน")
         val arrayAdapter=ArrayAdapter(view.context,android.R.layout.preference_category,activitiesList)
                 .also {
                     adapter ->
@@ -97,7 +97,7 @@ class add : Fragment() {
         var buttonok=view.findViewById<Button>(R.id.buttonok)
         buttonok.setOnClickListener {
             Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
-//            readnumcal(view,buttontype.text.toString())
+            readnumcal(view,buttontype.text.toString())
             val wallet=textspin.text.toString()
             val type =buttontype.text.toString()
             val date = buttonDate.text.toString()
@@ -106,29 +106,28 @@ class add : Fragment() {
             val note =noteedit.text.toString()
             val num2=tcn.text.toString()
 
-//            var money11=money1.toDouble()
-//            var num22=num2.toDouble()
-//            var money1111=num22+money11
+            var money11=money1.toDouble()
+            var num22=num2.toDouble()
+            var money1111=num22+money11
 
-//            updatedata(view,money1111,buttontype.text.toString())
+            updatedata(view,money1111,buttontype.text.toString())
             saveFireStore(view,money1, note, type, date,wallet,date2)
-//            readnumcal(view,buttontype.text.toString())
+            readnumcal(view,buttontype.text.toString())
         }
 
 
     }
 
     fun updatedata(view: View,num11: Double,typ:String){
-        val dbnum=db.collection("normal").document("normal")
+        var textspin =view.findViewById<TextView>(R.id.textspin)
+        val dbnum=db.collection("normal").document(textspin.text.toString())
         dbnum.update(typ,num11.toString())
     }
-    fun updatedata2(view: View,num11: Double){
-        val dbnum=db.collection("normal").document("normal")
-        dbnum.update("OT",num11.toString())
-    }
+
         fun readnumcal(view: View,typ:String){
+            var textspin =view.findViewById<TextView>(R.id.textspin)
             var tcn=view.findViewById<TextView>(R.id.textcheatnum)
-            val dbnum = db.collection("normal").document("normal")
+            val dbnum = db.collection("normal").document(textspin.text.toString())
             dbnum.get()
                     .addOnSuccessListener { document ->
                         if (document != null) {
@@ -190,6 +189,7 @@ class add : Fragment() {
     @SuppressLint("ResourceAsColor")
     private fun typepick(view: View){
         val buttontype=view.findViewById<Button>(R.id.buttontype)
+        var textspin=view.findViewById<TextView>(R.id.textspin)
         val color_list= arrayOf("เงินเดือน","OT","โบนัส","income","ดอกเบี้ย","ค่าอาหาร","ค่าที่พัก","ค่าเดินทาง","ค่าช๊อปปิ้ง","ค่าบำรุง")
         val option_builder =AlertDialog.Builder(view.context).apply {
             setTitle("เลือกประเภทของธุรกรรม")
@@ -206,8 +206,9 @@ class add : Fragment() {
                 8->buttontype.text="ค่าช๊อปปิ้ง"
                 9->buttontype.text="ค่าบำรุง"
                 }
+                readnumcal(view,buttontype.text.toString())
             })
-
+            readnumcal(view,buttontype.text.toString())
         }
         val alertDialog=option_builder.create()
         alertDialog.show()

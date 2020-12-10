@@ -27,14 +27,12 @@ class NormalRecycleAdapter(var normalList:ArrayList<normal_data>) : RecyclerView
         holder.textmoney.text=current.wallet
         holder.cheattext.text=current.time
         holder.delbuttom.setOnClickListener {
-            holder.dateselect.text="delete"
             db.collection("add")
                     .whereEqualTo("time",current.time)
                     .get()
                     .addOnSuccessListener { documents ->
                         for (document in documents) {
-                            holder.dateselect.text=document.id
-                            val datatodel =holder.dateselect.text.toString()
+                            val datatodel =document.id
                             deletedata(datatodel)
                         }
                     }

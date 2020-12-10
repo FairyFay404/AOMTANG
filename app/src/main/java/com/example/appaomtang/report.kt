@@ -3,18 +3,24 @@ package com.example.appaomtang
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.TestLooperManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.google.firebase.firestore.Query
 
-
+val sumot=ArrayList<numcal>()
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -30,32 +36,19 @@ class report : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-//    lateinit var payList:ArrayList<Entry>
-    //   lateinit var yearsList:ArrayList<String>
-
-//    private fun getList(): ArrayList<Entry> {
-//        payList.add(Entry(0F,60.0F))
-//        payList.add(Entry(1F,100.0F))
-//        payList.add(Entry(2F,50.0F))
-//        payList.add(Entry(3F,30.0F))
-//        payList.add(Entry(4F,80.0F))
-//        return payList
-//    }
-//    private fun getYears():ArrayList<String>{
-//        yearsList.add("2017")
-//        yearsList.add("2018")
-//        yearsList.add("2019")
-//        yearsList.add("2020")
-//        yearsList.add("2021")
-//        return yearsList
-//    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        var tex=view.findViewById<TextView>(R.id.texttser)
+        var tex2=view.findViewById<TextView>(R.id.texttsercheat)
+        readFireStore(view)
+        var sum=tex2.text.toString()
+        var sum2=sum.toFloat()
+
         val NoOfEmp = ArrayList<PieEntry>()
         val pieChart = view.findViewById<PieChart>(R.id.pieChart)
         NoOfEmp.add(PieEntry(100f, "เงินเดือน"))
-        NoOfEmp.add(PieEntry(20f, "OT"))
+        NoOfEmp.add(PieEntry(sum2, "OT"))
         NoOfEmp.add(PieEntry(30f, "โบนัส"))
         NoOfEmp.add(PieEntry(40f, "Income"))
         NoOfEmp.add(PieEntry(50f, "ดอกเบี้ย"))
@@ -79,10 +72,14 @@ class report : Fragment() {
         pieChart.animateXY(500, 500); //ปรับความไวตรงนี้ได้นะ
 
 
+        var ad=200
+        var c="f"
+        var adadc=ad.toFloat()
+        var adc=100f
         val NoOfEmp2 = ArrayList<PieEntry>()
         val pieChart2 = view.findViewById<PieChart>(R.id.pieChart2)
-        NoOfEmp2.add(PieEntry(100f, "ค่าอาหาร"))
-        NoOfEmp2.add(PieEntry(200f, "ค่าที่พัก"))
+        NoOfEmp2.add(PieEntry(adc, "ค่าอาหาร"))
+        NoOfEmp2.add(PieEntry(adadc, "ค่าที่พัก"))
         NoOfEmp2.add(PieEntry(80f, "ค่าเดินทาง"))
         NoOfEmp2.add(PieEntry(140f, "ค่าช๊อปปิ้ง"))
         NoOfEmp2.add(PieEntry(160f, "ค่าบำรุง"))
@@ -107,16 +104,37 @@ class report : Fragment() {
 
 
 
-//        payList=ArrayList()
-//        yearsList=ArrayList()
-//        val pieDataSet =PieDataSet(getList(view),"No. of students")
-//        val pieData =PieData(getYears(view),pieDataSet)
-//        pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS)
-//        var pieChart:PieChart=view.findViewById(R.id.pieChart)
-//        pieChart.data=pieData
-        //chart.absoluteAngles
-
     }
+    fun updatedata2(view: View,num11: Float){
+        val dbnum=db.collection("normal").document("normal")
+        dbnum.update("OT",num11.toString())
+    }
+
+    fun readFireStore(view: View){
+        var sum2:Float
+        db.collection("add")
+                .whereEqualTo("wallet", "My Wallet")
+                .whereEqualTo("type","OT")
+                .orderBy("datesort", Query.Direction.DESCENDING)
+                .orderBy("time", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        var tex=view.findViewById<TextView>(R.id.texttser)
+                        var sum=document.data["money"].toString()
+                        var sum1=sum.toFloat()
+                        var summ=tex.text.toString()
+                        var summ1=summ.toFloat()
+                        sum2=sum1+summ1
+                        tex.text=sum2.toString()
+
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("MOO", "Error getting documents: ", exception)
+                }
+    }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

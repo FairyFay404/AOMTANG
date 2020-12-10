@@ -12,6 +12,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.provider.Telephony
 import android.text.style.UnderlineSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,8 +21,11 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.util.*
 import java.util.zip.Inflater
 import kotlin.time.measureTimedValue
@@ -70,6 +74,7 @@ class add : Fragment() {
                         //Toast.makeText(view.context, "select ${activitiesList[position]}", Toast.LENGTH_SHORT).show()
 
                         textspin.text="${activitiesList[position]}"
+
                     }
 
                 }
@@ -79,18 +84,20 @@ class add : Fragment() {
                 }
             }
 
-        readnumcal(view)
+
         buttonDate.setOnClickListener{
             dateClicked(view)
         }
         var buttontype=view.findViewById<Button>(R.id.buttontype)
         buttontype.setOnClickListener {
             typepick(view)
+//            readnumcal(view,buttontype.text.toString())
         }
 
         var buttonok=view.findViewById<Button>(R.id.buttonok)
         buttonok.setOnClickListener {
             Toast.makeText(view.context,"บันทึกสำเร็จ",Toast.LENGTH_SHORT).show()
+//            readnumcal(view,buttontype.text.toString())
             val wallet=textspin.text.toString()
             val type =buttontype.text.toString()
             val date = buttonDate.text.toString()
@@ -99,45 +106,33 @@ class add : Fragment() {
             val note =noteedit.text.toString()
             val num2=tcn.text.toString()
 
-            val money11=money1.toDouble()
-            val num22=num2.toDouble()
-            val money1111=num22+money11
+//            var money11=money1.toDouble()
+//            var num22=num2.toDouble()
+//            var money1111=num22+money11
 
-            updatedata(view,money1111)
+//            updatedata(view,money1111,buttontype.text.toString())
             saveFireStore(view,money1, note, type, date,wallet,date2)
-            readnumcal(view)
+//            readnumcal(view,buttontype.text.toString())
         }
-        //val money =titleText.text.toString()
-        //val note = DescText.text.toString()
 
-        //val wallet =adapter.text.toString()
-
-
-            
-
-//        val arrayAdapter = ArrayAdapter.createFromResource(view.context,R.array.myWallet,android.R.layout.preference_category)
-//                .also {
-//                    adapter ->
-//                    adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice)
-//                    var spin:Spinner=view.findViewById(R.id.spinner2)
-//                    spin.adapter=adapter
-//                }
 
     }
 
-    fun updatedata(view: View,num11: Double){
+    fun updatedata(view: View,num11: Double,typ:String){
         val dbnum=db.collection("normal").document("normal")
-        dbnum.update("moneyin",num11.toString())
+        dbnum.update(typ,num11.toString())
     }
-        fun readnumcal(view: View){
+    fun updatedata2(view: View,num11: Double){
+        val dbnum=db.collection("normal").document("normal")
+        dbnum.update("OT",num11.toString())
+    }
+        fun readnumcal(view: View,typ:String){
             var tcn=view.findViewById<TextView>(R.id.textcheatnum)
             val dbnum = db.collection("normal").document("normal")
             dbnum.get()
                     .addOnSuccessListener { document ->
                         if (document != null) {
-                            val num111 = document["moneyin"].toString()
-                            val num101 = num111.toDouble()
-                            tcn.text=num101.toString()
+                            tcn.text = document[typ].toString()
                         }
                     }
         }
@@ -169,6 +164,7 @@ class add : Fragment() {
                     Toast.makeText(view.context,"record Failed to add",Toast.LENGTH_SHORT).show()
                 }
     }
+
 
     private fun dateClicked(view: View){
         val textDate=view.findViewById<Button>(R.id.date_textview)
@@ -215,12 +211,7 @@ class add : Fragment() {
         }
         val alertDialog=option_builder.create()
         alertDialog.show()
-//        val customView=LayoutInflater.from(view.context).inflate(R.layout.normalpaylist,null)
-//        val builder=AlertDialog.Builder(view.context).apply {
-//            setView(customView)
-//        }
-//        val dialog =builder.create()
-//        dialog.show()
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

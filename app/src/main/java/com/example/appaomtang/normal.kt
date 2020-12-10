@@ -38,7 +38,7 @@ class normal : Fragment() {
         var button=view.findViewById<Button>(R.id.button)
         var spin:Spinner=view.findViewById(R.id.spinner)
         val textspin=view.findViewById<TextView>(R.id.money)
-        val activitiesList= arrayListOf<String>("My Wallet","ใช้จ่ายทั่วไป ","เพื่อการศึกษา","เงินออมฉุกเฉิน")
+        val activitiesList= arrayListOf<String>("My Wallet","ใช้จ่ายทั่วไป","เพื่อการศึกษา","เงินออมฉุกเฉิน")
         val arrayAdapter=ArrayAdapter(view.context,android.R.layout.preference_category,activitiesList)
                 .also {
                     adapter ->

@@ -27,6 +27,7 @@ class NormalRecycleAdapter(var normalList:ArrayList<normal_data>) : RecyclerView
         holder.textmoney.text=current.wallet
         holder.cheattext.text=current.time
         holder.delbuttom.setOnClickListener {
+            holder.dateselect.text="delete complete please reflesh"
             db.collection("add")
                     .whereEqualTo("time",current.time)
                     .get()
@@ -39,18 +40,21 @@ class NormalRecycleAdapter(var normalList:ArrayList<normal_data>) : RecyclerView
                     .addOnFailureListener { exception ->
                         Log.w("MOO", "Error getting documents: ", exception)
                     }
-            holder.typepay.text="delete complete please reflesh"
-            db.collection("normal").document("normal")
+            db.collection("normal").document(holder.textmoney.text.toString())
                     .get()
                     .addOnSuccessListener { document->
                         if (document != null){
-                            holder.notewrite.text="${document["moneyin"]}"
-
+                            //holder.notewrite.text="${document[holder.typepay.text.toString()]}"
+                            var moneytype=document[holder.typepay.text.toString()].toString()
+                            var money=holder.money.text.toString()
+                            var mnt=moneytype.toDouble()
+                            var mn=money.toDouble()
+                            var sum=mnt-mn
+                            db.collection("normal").document(holder.textmoney.text.toString())
+                                .update(holder.typepay.text.toString(),sum)
                         }
                     }
-                    .addOnFailureListener{
 
-                    }
         }
     }
 

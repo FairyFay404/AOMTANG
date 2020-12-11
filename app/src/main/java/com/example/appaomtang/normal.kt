@@ -69,7 +69,6 @@ class normal : Fragment() {
             normalList.clear()
             recyclerView.adapter = NormalRecycleAdapter(normalList)
             recyclerView.layoutManager = LinearLayoutManager(activity)
-            readnumcal(view)
             getsort(view)
         }
 
@@ -82,15 +81,40 @@ class normal : Fragment() {
 //        val upd=10
 //        dbnum.update("income",upd.toString())
 //    }
-    fun readnumcal(view: View){
-        val b_in=view.findViewById<TextView>(R.id.b_in)
-        val dbnum=db.collection("normal").document("normal")
+    fun readnumcal(view: View,wallet: String){
+        var b_in=view.findViewById<TextView>(R.id.b_in)
+        var b_out=view.findViewById<TextView>(R.id.b_out)
+        var b_sum=view.findViewById<TextView>(R.id.b_sum)
+        val dbnum=db.collection("normal").document(wallet)
         dbnum.get()
                 .addOnSuccessListener { document->
                         if (document != null) {
-                            val num111=document["moneyin"].toString()
-                            val num11=num111.toDouble()
-                            b_in.text=num11.toString()+" บาท"
+                            var numot=document["OT"].toString()
+                            var sumot=numot.toDouble()//
+                            var numincome=document["income"].toString()
+                            var sumincome=numincome.toDouble()//
+                            var numshop=document["ค่าช๊อปปิ้ง"].toString()
+                            var sumshop=numshop.toDouble()
+                            var numhome=document["ค่าที่พัก"].toString()
+                            var sumhome=numhome.toDouble()
+                            var numrepair=document["ค่าบำรุง"].toString()
+                            var sumrepair=numrepair.toDouble()
+                            var numfood=document["ค่าอาหาร"].toString()
+                            var sumfood=numfood.toDouble()
+                            var numgo=document["ค่าเดินทาง"].toString()
+                            var sumgo=numgo.toDouble()
+                            var numearn=document["ดอกเบี้ย"].toString()
+                            var sumearn=numearn.toDouble()//
+                            var nummonth=document["เงินเดือน"].toString()
+                            var summonth=nummonth.toDouble()//
+                            var numbonus=document["โบนัส"].toString()
+                            var sumbonus=numbonus.toDouble()//
+                            var sumin=sumot+sumbonus+sumearn+summonth+sumincome
+                            var sumout=sumshop+sumgo+sumfood+sumrepair+sumhome
+                            var sumsum=sumin-sumout
+                            b_in.text=sumin.toString()+" บาท"
+                            b_out.text=sumout.toString()+" บาท"
+                            b_sum.text=sumsum.toString()+" บาท"
                         }
                 }
     }
@@ -122,6 +146,7 @@ class normal : Fragment() {
                 if (document != null) {
                     val num111=document["walletsort"].toString()
                     readFireStore(view,num111)
+                    readnumcal(view,num111)
                 }
             }
     }

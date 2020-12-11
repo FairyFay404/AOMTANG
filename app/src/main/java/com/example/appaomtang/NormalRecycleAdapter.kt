@@ -54,7 +54,7 @@ class NormalRecycleAdapter(var normalList:ArrayList<normal_data>) : RecyclerView
                                 .update(holder.typepay.text.toString(),sum)
                         }
                     }
-
+            
         }
     }
 

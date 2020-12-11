@@ -38,22 +38,23 @@ class MainActivity : AppCompatActivity() {
         when(item?.itemId){
             R.id.walletselect -> {
                 selectedOption = "walletselect"
-                //val walletselection = Intent(this, wallet::class.java)
-                //startActivity(walletselection)
+                val walletselection = Intent(this, asd::class.java)
+                startActivity(walletselection)
                 Toast.makeText(this, ""+selectedOption, Toast.LENGTH_SHORT).show()
             }
 
             R.id.timeselect -> {
                 selectedOption = "timeselect"
-                //val timeselection = Intent(this, reportActivity::class.java)
-                //startActivity(timeselection)
+                val timeselection = Intent(this,Reportchart::class.java)
+                startActivity(timeselection)
                 Toast.makeText(this, ""+selectedOption, Toast.LENGTH_SHORT).show()
             }
 
             R.id.typeselect -> {
                 selectedOption = "typeselect"
-                //val typeselection = Intent(this, note::class.java)
-                //startActivity(typeselection)
+                //val typeselection = Intent(this, ::class.java)
+                var intent=Intent(this,type::class.java)
+                startActivity(intent)
                 Toast.makeText(this, ""+selectedOption, Toast.LENGTH_SHORT).show()
             }
         }
